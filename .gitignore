@@ -1,0 +1,39 @@
+## Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+## Virtual environments
+.venv/
+venv/
+env/
+
+## Environment & secrets
+.env
+.env.*
+
+## Logs & runtime files
+flask.log
+logs/
+*.log
+input.mp3
+output.mp4
+
+## IDE / editor
+.vscode/
+.idea/
+.cursor/
+*.swp
+*.swo
+
+## OS junk
+.DS_Store
+Thumbs.db
+
+## Docker
+*.pid
+*.pid.lock
+

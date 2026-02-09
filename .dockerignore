@@ -1,0 +1,35 @@
+# Virtual env and caches (not needed inside image)
+.venv
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.mypy_cache
+
+# Local env file - use docker-compose env_file or -e instead (keeps secrets out of image)
+.env
+.env.*
+
+# Runtime artifacts (avoid copying into image)
+flask.log
+*.log
+input.mp3
+output.mp4
+
+# Git and IDE
+.git
+.gitignore
+.cursor
+.idea
+*.swp
+*.swo
+
+# Docs and dev helpers (optional; include if you want them in image)
+POSTMAN_TEST.md
+gen_webhook_headers.py
+DOCKER.md
+
+# Keep Docker files in context
+!Dockerfile
+!docker-compose.yml
+!.dockerignore

@@ -1,0 +1,148 @@
+{
+  "podcasts": [
+    {
+      "podcast_id": 23076,
+      "show_title": "The Smashi Gaming Show",
+      "cms_show_id": 25,
+      "cms_category_id": 2
+    },
+    {
+      "podcast_id": 25110,
+      "show_title": "ذا سماشي ستايل شو",
+      "cms_show_id": 31,
+      "cms_category_id": 20
+    },
+    {
+      "podcast_id": 25152,
+      "show_title": "ذا سماشي جرين شو",
+      "cms_show_id": 26,
+      "cms_category_id": 16
+    },
+    {
+      "podcast_id": 25154,
+      "show_title": "ذا سماشي درايڤز شو",
+      "cms_show_id": 23,
+      "cms_category_id": 14
+    },
+    {
+      "podcast_id": 25157,
+      "show_title": "ذا سماشي فوود شو",
+      "cms_show_id": 35,
+      "cms_category_id": 13
+    },
+    {
+      "podcast_id": 25158,
+      "show_title": "ذا سماشي ويلنس شو",
+      "cms_show_id": 27,
+      "cms_category_id": 17
+    },
+    {
+      "podcast_id": 25159,
+      "show_title": "ذا سماشي هوم شو",
+      "cms_show_id": 28,
+      "cms_category_id": 19
+    },
+    {
+      "podcast_id": 25147,
+      "show_title": "The Smashi Green Show",
+      "cms_show_id": 26,
+      "cms_category_id": 16
+    },
+    {
+      "podcast_id": 25148,
+      "show_title": "The Smashi Drives Show",
+      "cms_show_id": 23,
+      "cms_category_id": 14
+    },
+    {
+      "podcast_id": 25146,
+      "show_title": "The Smashi Food Show",
+      "cms_show_id": 35,
+      "cms_category_id": 13
+    },
+    {
+      "podcast_id": 25145,
+      "show_title": "The Smashi Wellness Show",
+      "cms_show_id": 27,
+      "cms_category_id": 17
+    },
+    {
+      "podcast_id": 25143,
+      "show_title": "The Smashi Home Show",
+      "cms_show_id": 28,
+      "cms_category_id": 19
+    },
+    {
+      "podcast_id": 25141,
+      "show_title": "The Smashi Travel Show",
+      "cms_show_id": 32,
+      "cms_category_id": 15
+    },
+    {
+      "podcast_id": 25140,
+      "show_title": "The Smashi Style Show",
+      "cms_show_id": 31,
+      "cms_category_id": 20
+    },
+    {
+      "podcast_id": 25084,
+      "show_title": "عرض سماشي كريبتو",
+      "cms_show_id": 22,
+      "cms_category_id": 3
+    },
+    {
+      "podcast_id": 15626,
+      "show_title": "Smashi Entertainment Show",
+      "cms_show_id": 24,
+      "cms_category_id": 12
+    },
+    {
+      "podcast_id": 6989,
+      "show_title": "ذا سماشي سبورتس شو",
+      "cms_show_id": 39,
+      "cms_category_id": 24
+    },
+    {
+      "podcast_id": 6890,
+      "show_title": "The Smashi Sports Show",
+      "cms_show_id": 38,
+      "cms_category_id": 24
+    },
+    {
+      "podcast_id": 876,
+      "show_title": "ذا سماشي انترتينمنت شو",
+      "cms_show_id": 24,
+      "cms_category_id": 12
+    },
+    {
+      "podcast_id": 871,
+      "show_title": "The Smashi Crypto Show",
+      "cms_show_id": 22,
+      "cms_category_id": 3
+    },
+    {
+      "podcast_id": 875,
+      "show_title": "ذا سماشي سبورتس شو",
+      "cms_show_id": 39,
+      "cms_category_id": 24
+    },
+    {
+      "podcast_id": 874,
+      "show_title": "ذا سماشي جيمنج شو",
+      "cms_show_id": 25,
+      "cms_category_id": 2
+    },
+    {
+      "podcast_id": 128,
+      "show_title": "ذا سماشي بزنس شو",
+      "cms_show_id": 15,
+      "cms_category_id": 22
+    },
+    {
+      "podcast_id": 127,
+      "show_title": "The Smashi Business Show",
+      "cms_show_id": 7,
+      "cms_category_id": 22
+    }
+  ]
+}

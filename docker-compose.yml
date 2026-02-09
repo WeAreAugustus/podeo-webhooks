@@ -1,0 +1,24 @@
+# Podeo Upload - single service (Flask API + ffmpeg)
+# Usage: docker compose up -d
+#        docker compose logs -f
+#        docker compose down
+
+services:
+  podeo-upload:
+    build: .
+    image: podeo-upload:latest
+    container_name: podeo-upload
+    restart: unless-stopped
+    ports:
+      - "${PORT:-5000}:5000"
+    env_file:
+      - .env
+    environment:
+      - FLASK_APP=app.py
+      - LOG_DIR=/app/logs
+    volumes:
+      # Persist logs on host (app writes to LOG_DIR/flask.log)
+      - ./logs:/app/logs
+    # Optional: override data or image without rebuilding (uncomment if you update JSON often)
+    # - ./data:/app/data:ro
+    # - ./image.png:/app/image.png:ro
