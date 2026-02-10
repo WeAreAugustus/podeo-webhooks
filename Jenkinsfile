@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APP_NAME = 'lovin-ai-agent-backend'
+        APP_NAME = 'podeo_webhook'
         APP_VERSION = '1.0.0'
         DOCKER_TAG = "${APP_NAME}:${APP_VERSION}"
 
