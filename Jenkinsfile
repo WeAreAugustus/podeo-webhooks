@@ -51,7 +51,7 @@ pipeline {
     string(credentialsId: 'stage4_mail_pass', variable: 'MAIL_PASSWORD'),
     string(credentialsId: 'aws_secret_access_key_uae', variable: 'AWS_SECRET_ACCESS_KEY_UAE_SMASHI'),
     string(credentialsId: 'aws_secret_access_key_s3_frank_media_live_api', variable: 'AWS_SECRET_ACCESS_KEY_'),
-    string(credentialsId: 'AWS_MASTER_ID', variable: 'AWS_MASTER_ID')
+    string(credentialsId: 'AWS_MASTER_ID', variable: 'AWS_MASTER_ID'),
     string(credentialsId: 'smashi_mail_pass', variable: 'SMASHI_MAIL_PASSWORD'),
     string(credentialsId: 'email_auth_lovin', variable: 'LOVIN_MAIL_PASSWORD')
 
