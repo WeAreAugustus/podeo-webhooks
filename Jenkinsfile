@@ -52,6 +52,8 @@ pipeline {
     string(credentialsId: 'aws_secret_access_key_uae', variable: 'AWS_SECRET_ACCESS_KEY_UAE_SMASHI'),
     string(credentialsId: 'aws_secret_access_key_s3_frank_media_live_api', variable: 'AWS_SECRET_ACCESS_KEY_'),
     string(credentialsId: 'AWS_MASTER_ID', variable: 'AWS_MASTER_ID')
+    string(credentialsId: 'smashi_mail_pass', variable: 'SMASHI_MAIL_PASSWORD'),
+    string(credentialsId: 'email_auth_lovin', variable: 'LOVIN_MAIL_PASSWORD')
 
 
 
@@ -65,9 +67,9 @@ pipeline {
                         SECRET_KEY="pf9Wkove4IKEAXvy-cQkeDPhv9Cb3Ag-wyBLCbq_dFw"
                         CLIQ_ZAPIKEY="1001.9e914b3c467531465d6e1eb2042dfe01.a92c46ee5d013c8784b70df1196f1fce"
                         email_smashi_username="mahmouds@weareaugustus.com"
-                        email_smashi_password="123123123"
+                        email_smashi_password="${SMASHI_MAIL_PASSWORD}"
                         email_lovin_username="ai@lovin.co"
-                        email_lovin_password="m79KBP#)pHDZ#Fv1TR6odfsB"
+                        email_lovin_password="${LOVIN_MAIL_PASSWORD}"
                         PODEO_CLIENT_ID="4564"
                         PODEO_CLIENT_SECRET="I3cLUutIv22EijgawfKiGJVn40x8GYacdQhvfgFZ"
                         AWS_ACCESS_KEY_ID=${AWS_MASTER_ID}
