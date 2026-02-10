@@ -106,7 +106,7 @@ pipeline {
                 sh """
                     sudo docker run -d \\
                     --name ${APP_NAME} \\
-                    -p 6055:8000 \\
+                    -p 6055:5000 \\
                     --env-file .env \\
                     -m 3g \\
                     --restart unless-stopped \\
