@@ -94,3 +94,27 @@ def notify_rss_podeo(title, json_payload, channel_name):
         logger.info(f"Cliq webhook sent successfully: {response.json()['message']}")
     except Exception as e:
         logger.error(f"Error sending Cliq webhook: {e}")
+
+
+def notify_podeo_error(title, message_text, channel_name="podeowebhooks"):
+    """Send an error notification to Cliq (e.g. webhook 403/500)."""
+    try:
+        headers = {"Content-Type": "application/json"}
+        args = {"zapikey": CLIQ_ZAPIKEY}
+        url = f"https://cliq.zoho.com/company/837937507/api/v2/channelsbyname/{channel_name}/message"
+        payload = {
+            "card": {
+                "title": title,
+                "theme": "modern-inline",
+            },
+            "bot": {
+                "name": "Podeo Webhooks",
+                "image": "https://secure.gravatar.com/avatar/60ed7741ba4020db6132fb8cd0be1835?s=96&d=mm&r=g",
+            },
+            "text": message_text,
+        }
+        response = requests.post(url, json=payload, headers=headers, params=args)
+        response.raise_for_status()
+        logger.info("Cliq error notification sent: %s", response.json().get("message"))
+    except Exception as e:
+        logger.error("Error sending Cliq error notification: %s", e)

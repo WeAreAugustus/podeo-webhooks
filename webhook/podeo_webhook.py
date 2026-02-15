@@ -9,7 +9,7 @@ import time
 from flask import request
 from flask_restx import Namespace, Resource
 
-from resources.cliq_podeo import notify_rss_podeo
+from resources.cliq_podeo import notify_rss_podeo, notify_podeo_error
 from resources.upload_podeo_videos import (
     smashi_login,
     upload_video_to_smashi,
@@ -195,14 +195,21 @@ class PodeoWebhook(Resource):
         signature_string = f"{CLIENT_SECRET}_{CLIENT_ID}__{received_date}"
         expected_hash = hashlib.sha256(signature_string.encode("utf-8")).hexdigest()
         if not hmac.compare_digest(expected_hash, received_token):
+            error_detail = (
+                f"*Invalid signature (403)*\n"
+                f"• received_token: `{received_token}`\n"
+                f"• received_date: `{received_date}`\n"
+                f"• expected_hash: `{expected_hash}`\n"
+                f"• headers: `{dict(request.headers)}`"
+            )
             logger.warning(
                 "Webhook 403 Invalid signature: headers=%s received_token=%s received_date=%s expected_hash=%s",
                 dict(request.headers),
                 received_token,
                 received_date,
                 expected_hash,
-                
             )
+            notify_podeo_error("Podeo webhook 403 – Invalid signature", error_detail)
             return {"error": "Invalid signature"}, 403
 
         try:
@@ -220,4 +227,5 @@ class PodeoWebhook(Resource):
             return {"status": "received"}, 200
         except Exception as e:
             logger.exception("Error processing webhook: %s", e)
+            notify_podeo_error("Podeo webhook error (500)", str(e))
             return {"error": "Internal server error"}, 500
