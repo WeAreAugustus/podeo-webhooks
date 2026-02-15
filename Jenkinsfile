@@ -70,8 +70,8 @@ pipeline {
                         email_smashi_password="${SMASHI_MAIL_PASSWORD}"
                         email_lovin_username="ai@lovin.co"
                         email_lovin_password="${LOVIN_MAIL_PASSWORD}"
-                        PODEO_CLIENT_ID="4564"
-                        PODEO_CLIENT_SECRET="I3cLUutIv22EijgawfKiGJVn40x8GYacdQhvfgFZ"
+                        PODEO_CLIENT_ID="181979"
+                        PODEO_CLIENT_SECRET="dOKDNFxKcSKLEX1apxmV8jAVmxNyW0VTvUa4okZb"
                         AWS_ACCESS_KEY_ID=${AWS_MASTER_ID}
                         AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_UAE_SMASHI}
                         AWS_REGION='me-central-1'

@@ -9,4 +9,4 @@ date = f"{now.day}-{now.month}-{now.year}"
 s = f"{CLIENT_SECRET}_{CLIENT_ID}__{date}"
 token = hashlib.sha256(s.encode("utf-8")).hexdigest()
 print("date:", date)
-print("token:", token)
+print("token:", token) 
