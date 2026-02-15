@@ -30,8 +30,10 @@ except ImportError:
     lovin_login = None
 
 ns = Namespace("Podeo", path="/webhook", description="Podeo webhook")
-CLIENT_ID = os.getenv("PODEO_CLIENT_ID", "")
-CLIENT_SECRET = os.getenv("PODEO_CLIENT_SECRET", "")
+CLIENT_ID = (os.getenv("PODEO_CLIENT_ID", "") or "").strip().strip('"')
+CLIENT_SECRET = (os.getenv("PODEO_CLIENT_SECRET", "") or "").strip().strip('"')
+if not CLIENT_ID or not CLIENT_SECRET:
+    logger.warning("Podeo webhook signature auth disabled: PODEO_CLIENT_ID or PODEO_CLIENT_SECRET not set")
 
 
 @ns.route("/podeo")
@@ -187,8 +189,8 @@ class PodeoWebhook(Resource):
             notify_rss_podeo(f"Podcast distributed: {title}", event_data, "podeowebhooks")
 
     def post(self):
-        received_token = request.headers.get("token") or request.headers.get("Token")
-        received_date = request.headers.get("date") or request.headers.get("Date")
+        received_token = (request.headers.get("token") or request.headers.get("Token") or "").strip()
+        received_date = (request.headers.get("date") or request.headers.get("Date") or "").strip()
         if not received_token or not received_date:
             return {"error": "Missing headers"}, 400
 
@@ -209,8 +211,7 @@ class PodeoWebhook(Resource):
                 received_date,
                 expected_hash,
             )
-            notify_podeo_error("Podeo webhook 403 – Invalid signature", error_detail)
-            return {"error": "Invalid signature"}, 403
+            return {"error": "Invalid signature" , "error_detail": error_detail}, 403
 
         try:
             payload = request.json
