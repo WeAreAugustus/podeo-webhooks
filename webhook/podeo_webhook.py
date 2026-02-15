@@ -195,6 +195,13 @@ class PodeoWebhook(Resource):
         signature_string = f"{CLIENT_SECRET}_{CLIENT_ID}__{received_date}"
         expected_hash = hashlib.sha256(signature_string.encode("utf-8")).hexdigest()
         if not hmac.compare_digest(expected_hash, received_token):
+            logger.warning(
+                "Webhook 403 Invalid signature: headers=%s received_token=%s received_date=%s expected_hash=%s",
+                dict(request.headers),
+                received_token,
+                received_date,
+                expected_hash,
+            )
             return {"error": "Invalid signature"}, 403
 
         try:
