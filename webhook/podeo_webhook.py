@@ -112,12 +112,12 @@ class PodeoWebhook(Resource):
                 return ""
 
             if is_lovin_podcast(podcast_id) and lovin_login:
-                lovin_username = os.environ.get("email_lovin_username")
-                lovin_pass = os.environ.get("email_lovin_password")
-                token = lovin_login("https://lovin.co/cairo/graphql", lovin_username, lovin_pass)
-                lovin_upload(token, event_data, "https://cdn.smashi.tv/" + uploaded_url)
-                lovin_backend_email = os.getenv("email_lovin_username")
-                lovin_backend_password = os.getenv("email_lovin_password")
+                # lovin_username = os.environ.get("email_lovin_username")
+                # lovin_pass = os.environ.get("email_lovin_password")
+                # token = lovin_login("https://lovin.co/cairo/graphql", lovin_username, lovin_pass)
+                # lovin_upload(token, event_data, "https://cdn.smashi.tv/" + uploaded_url)
+                # lovin_backend_email = os.getenv("email_lovin_username")
+                # lovin_backend_password = os.getenv("email_lovin_password")
 
 
                 lovin_cms_show_id = find_lovin_show_id(podcast_id)
