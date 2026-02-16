@@ -66,10 +66,10 @@ pipeline {
                         DOCKER_TAG=${DOCKER_TAG}
                         SECRET_KEY="pf9Wkove4IKEAXvy-cQkeDPhv9Cb3Ag-wyBLCbq_dFw"
                         CLIQ_ZAPIKEY=1001.9e914b3c467531465d6e1eb2042dfe01.a92c46ee5d013c8784b70df1196f1fce
-                        email_smashi_username="menna@weareaugustus.com"
-                        email_smashi_password="${SMASHI_MAIL_PASSWORD}"
-                        email_lovin_username="ai@lovin.co"
-                        email_lovin_password="${LOVIN_MAIL_PASSWORD}"
+                        email_smashi_username=menna@weareaugustus.com
+                        email_smashi_password=${SMASHI_MAIL_PASSWORD}
+                        email_lovin_username=mahmoud.s@augustusmedia.com
+                        email_lovin_password=${LOVIN_MAIL_PASSWORD}
                         PODEO_CLIENT_ID="181979"
                         PODEO_CLIENT_SECRET="dOKDNFxKcSKLEX1apxmV8jAVmxNyW0VTvUa4okZb"
                         AWS_ACCESS_KEY_ID=${AWS_MASTER_ID}
