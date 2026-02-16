@@ -74,8 +74,8 @@ pipeline {
                         PODEO_CLIENT_SECRET="dOKDNFxKcSKLEX1apxmV8jAVmxNyW0VTvUa4okZb"
                         AWS_ACCESS_KEY_ID=${AWS_MASTER_ID}
                         AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_UAE_SMASHI}
-                        AWS_REGION='me-central-1'
-                        AWS_S3_BUCKET_NAME='smashi-uae'
+                        AWS_REGION="me-central-1"
+                        AWS_S3_BUCKET_NAME="smashi-uae"
                     """
                     echo ".env file created successfully."
                 }
