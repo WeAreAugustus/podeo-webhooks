@@ -65,7 +65,7 @@ pipeline {
                         APP_VERSION=${APP_VERSION}
                         DOCKER_TAG=${DOCKER_TAG}
                         SECRET_KEY="pf9Wkove4IKEAXvy-cQkeDPhv9Cb3Ag-wyBLCbq_dFw"
-                        CLIQ_ZAPIKEY="1001.fc557a30900ace1c7c0302f7065bb276.a1ea079168d207fa57dcc0235b1291cc
+                        CLIQ_ZAPIKEY=1001.fc557a30900ace1c7c0302f7065bb276.a1ea079168d207fa57dcc0235b1291cc
                         email_smashi_username="mahmouds@weareaugustus.com"
                         email_smashi_password="${SMASHI_MAIL_PASSWORD}"
                         email_lovin_username="ai@lovin.co"
