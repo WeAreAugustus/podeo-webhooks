@@ -73,3 +73,18 @@ def is_lovin_podcast(podcast_id: int) -> bool:
 def is_smashi_podcast(podcast_id: int) -> bool:
     """True if podcast_id is in podcasts_smashi.json."""
     return podcast_id in SMASHI_INDEX
+
+
+def get_show_title(podcast_id):
+    """
+    Returns show_title for a given podcast_id from podcasts_lovin.json or podcasts_smashi.json.
+    Returns None if not found. Accepts int or numeric string.
+    """
+    if podcast_id is None:
+        return None
+    try:
+        pid = int(podcast_id)
+    except (TypeError, ValueError):
+        return None
+    podcast = LOVIN_INDEX.get(pid) or SMASHI_INDEX.get(pid)
+    return podcast.get("show_title") if podcast else None

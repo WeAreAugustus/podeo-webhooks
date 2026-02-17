@@ -4,7 +4,7 @@ import requests
 from datetime import datetime
 from dotenv import load_dotenv
 
-from utils.podcast_lookup import is_lovin_podcast, is_smashi_podcast
+from utils.podcast_lookup import get_show_title, is_lovin_podcast, is_smashi_podcast
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -20,6 +20,9 @@ def notify_rss_podeo(title, json_payload, channel_name):
         )
         try:
             brand_message = f"🏷️ *Brand:* {json_payload.get('brand_name')}" if json_payload.get("brand_name") else ""
+            podcast_id = json_payload.get("podcasts_id")
+            show_title = get_show_title(podcast_id) if podcast_id is not None else None
+            show_title_message = f"📺 *Show Title:* {show_title}" if show_title else ""
             podcast_message = f"🎧 *Podcast:* {json_payload.get('podcast_name')}" if json_payload.get("podcast_name") else ""
             episode_message = f"🎙️ *Episode:* {json_payload.get('episode_name')}" if json_payload.get("episode_name") else ""
 
@@ -45,7 +48,6 @@ def notify_rss_podeo(title, json_payload, channel_name):
             last_episode_message = f"🎙️ *Latest Episode Number:* {json_payload.get('last_episode_number')}" if json_payload.get("last_episode_number") else ""
             last_season_message = f"🎬 *Latest Season Number:* {json_payload.get('last_season_number')}" if json_payload.get("last_season_number") else ""
 
-            podcast_id = json_payload.get("podcasts_id")
             if podcast_id is not None:
                 if is_lovin_podcast(podcast_id):
                     upload_target_message = "📤 *Upload target:* Lovin"
@@ -58,6 +60,7 @@ def notify_rss_podeo(title, json_payload, channel_name):
 
             message = f"""
 {brand_message}
+{show_title_message}
 {podcast_message}
 {episode_message}
 {audio_message}
