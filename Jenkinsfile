@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            label 'ai-server-node'
+            label 'recording-node'
         }
     }
 
