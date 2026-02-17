@@ -173,20 +173,20 @@ class PodeoWebhook(Resource):
     def handle_events(self, event_type, event_data):
         title = event_data.get("name", "")
         if event_type == "episode_updated":
-            notify_rss_podeo(f"Episode updated: {title}", event_data, "podeowebhooks")
+            pass
         elif event_type == "episode_removed":
-            notify_rss_podeo(f"Episode removed: {title}", event_data, "podeowebhooks")
+            pass
         elif event_type == "episode_created":
-            notify_rss_podeo(f"Episode created: {title}", event_data, "podeowebhooks")
+            pass
         elif event_type == "episode_distributed":
             notify_rss_podeo(f"Episode distributed: {title}", event_data, "podeowebhooks")
             self.upload_mp3(event_data)
         elif event_type == "podcast_updated":
-            notify_rss_podeo(f"Podcast updated: {title}", event_data, "podeowebhooks")
+            pass
         elif event_type == "podcast_removed":
-            notify_rss_podeo(f"Podcast removed: {title}", event_data, "podeowebhooks")
+            pass
         elif event_type == "podcast_distributed":
-            notify_rss_podeo(f"Podcast distributed: {title}", event_data, "podeowebhooks")
+            pass
 
     def post(self):
         received_token = (request.headers.get("token") or request.headers.get("Token") or "").strip()
