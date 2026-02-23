@@ -13,10 +13,11 @@ CLIQ_ZAPIKEY = os.environ.get("CLIQ_ZAPIKEY", "")
 
 
 def notify_rss_podeo(title, json_payload, channel_name):
+    """Send a Cliq card notification with the image from the API (webhook payload)."""
     try:
         image_url = json_payload.get(
             "image_url",
-            "https://podeo.co/wp-content/uploads/2024/09/EmblemBlueSmall.png"
+            "https://podeo.co/wp-content/uploads/2024/09/EmblemBlueSmall.png",
         )
         try:
             brand_message = f"🏷️ *Brand:* {json_payload.get('brand_name')}" if json_payload.get("brand_name") else ""

@@ -21,6 +21,8 @@ COPY resources/ resources/
 COPY utils/ utils/
 COPY webhook/ webhook/
 COPY data/ data/
+# Podcast images per show (image_path in podcasts_*.json; used for poster by podcasts_id)
+COPY images/ images/
 
 # Optional: run as non-root (create user and chown)
 # RUN useradd -m appuser && chown -R appuser:appuser /app

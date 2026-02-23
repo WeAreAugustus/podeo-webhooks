@@ -5,271 +5,316 @@
         "podcast_id": 124,
         "show_title": "The Lovin Dubai Show",
         "cms_show_id": 1,
-        "cms_category_id": 1
+        "cms_category_id": 1,
+        "image_path": "images/lovin/Lovin Dubai.jpg"
       },
       {
         "podcast_id": 23066,
         "show_title": "ذي لوفن اسلو شو",
         "cms_show_id": 14,
-        "cms_category_id": 14
+        "cms_category_id": 14,
+        "image_path": "images/lovin/Lovin Isloo.jpg"
       },
       {
         "podcast_id": 25352,
         "show_title": "The Lovin' Rak Show",
         "cms_show_id": 7,
-        "cms_category_id": 7
+        "cms_category_id": 7,
+        "image_path": "images/lovin/Lovin RAK.jpg"
       },
       {
         "podcast_id": 23068,
         "show_title": "ذي لوفن الرياض شو",
         "cms_show_id": 2,
-        "cms_category_id": 2
+        "cms_category_id": 2,
+        "image_path": "images/lovin/The Lovin Riyadh.jpg"
       },
       {
         "podcast_id": 23051,
         "show_title": "ذي لوفن كويت شو",
         "cms_show_id": 11,
-        "cms_category_id": 11
+        "cms_category_id": 11,
+        "image_path": "images/lovin/Lovin Kuwait.jpg"
       },
       {
         "podcast_id": 23074,
         "show_title": "ذي لوفن بغداد شو",
         "cms_show_id": 22,
-        "cms_category_id": 22
+        "cms_category_id": 22,
+        "image_path": "images/lovin/Lovin Baghdad.jpg"
       },
       {
         "podcast_id": 23075,
         "show_title": "ذي لوفن الخرطوم شو",
         "cms_show_id": 20,
-        "cms_category_id": 20
+        "cms_category_id": 20,
+        "image_path": "images/lovin/Lovin Khartoum.jpg"
       },
       {
         "podcast_id": 23072,
         "show_title": "The Lovin Saudi Show",
         "cms_show_id": 3,
-        "cms_category_id": 3
+        "cms_category_id": 3,
+        "image_path": "images/lovin/Lovin Saudi.jpg"
       },
       {
         "podcast_id": 23049,
         "show_title": "ذي لوفن أبوظبي شو",
         "cms_show_id": 8,
-        "cms_category_id": 8
+        "cms_category_id": 8,
+        "image_path": "images/lovin/Lovin Abu Dhabi.jpg"
       },
       {
         "podcast_id": 24961,
         "show_title": "دا لوون لاہور شو",
         "cms_show_id": 18,
-        "cms_category_id": 18
+        "cms_category_id": 18,
+        "image_path": "images/lovin/Lovin Lahore.jpg"
       },
       {
         "podcast_id": 24942,
         "show_title": "ذي لوڤن نيوم شو",
         "cms_show_id": 15,
-        "cms_category_id": 15
+        "cms_category_id": 15,
+        "image_path": "images/lovin/Lovin Neom.jpg"
       },
       {
         "podcast_id": 24941,
         "show_title": "ذي لوڤن شارقة شو",
         "cms_show_id": 7,
-        "cms_category_id": 7
+        "cms_category_id": 7,
+        "image_path": "images/lovin/The Lovin Sharjah.jpg"
       },
       {
         "podcast_id": 23070,
         "show_title": "The Lovin Cairo Show",
         "cms_show_id": 12,
-        "cms_category_id": 12
+        "cms_category_id": 12,
+        "image_path": "images/lovin/Lovin Cairo.jpg"
       },
       {
         "podcast_id": 24943,
         "show_title": "ذي لوفن جدة شو",
         "cms_show_id": 17,
-        "cms_category_id": 17
+        "cms_category_id": 17,
+        "image_path": "images/lovin/Lovin Jeddah.jpg"
       },
       {
         "podcast_id": 24944,
         "show_title": "ذي لوفن دمام شو",
         "cms_show_id": 16,
-        "cms_category_id": 16
+        "cms_category_id": 16,
+        "image_path": "images/lovin/Lovin Dammam.jpg"
       },
       {
         "podcast_id": 24825,
         "show_title": "The Lovin Damam Show",
         "cms_show_id": 16,
-        "cms_category_id": 16
+        "cms_category_id": 16,
+        "image_path": "images/lovin/Lovin Dammam.jpg"
       },
       {
         "podcast_id": 24822,
         "show_title": "The Lovin Jeddah Show",
         "cms_show_id": 17,
-        "cms_category_id": 17
+        "cms_category_id": 17,
+        "image_path": "images/lovin/Lovin Jeddah.jpg"
       },
       {
         "podcast_id": 24821,
         "show_title": "The Lovin Lahore Show",
         "cms_show_id": 18,
-        "cms_category_id": 18
+        "cms_category_id": 18,
+        "image_path": "images/lovin/Lovin Lahore.jpg"
       },
       {
         "podcast_id": 24820,
         "show_title": "The Lovin Neom Show",
         "cms_show_id": 15,
-        "cms_category_id": 15
+        "cms_category_id": 15,
+        "image_path": "images/lovin/Lovin Neom.jpg"
       },
       {
         "podcast_id": 24803,
         "show_title": "The Lovin Sharjah Show",
         "cms_show_id": 7,
-        "cms_category_id": 7
+        "cms_category_id": 7,
+        "image_path": "images/lovin/The Lovin Sharjah.jpg"
       },
       {
         "podcast_id": 23052,
         "show_title": "ذي لوفن مسقط شو",
         "cms_show_id": 5,
-        "cms_category_id": 5
+        "cms_category_id": 5,
+        "image_path": "images/lovin/Lovin Muscat.jpg"
       },
       {
         "podcast_id": 23069,
         "show_title": "ذي لوفن فلسطين شو",
         "cms_show_id": 21,
-        "cms_category_id": 21
+        "cms_category_id": 21,
+        "image_path": "images/lovin/Lovin Palestine.jpg"
       },
       {
         "podcast_id": 23054,
         "show_title": "ذي لوفن عمان شو",
         "cms_show_id": 10,
-        "cms_category_id": 10
+        "cms_category_id": 10,
+        "image_path": "images/lovin/Lovin Amman.jpg"
       },
       {
         "podcast_id": 24602,
         "show_title": "دی لوون کراچی شو",
         "cms_show_id": 19,
-        "cms_category_id": 19
+        "cms_category_id": 19,
+        "image_path": "images/lovin/Lovin Karachi.jpg"
       },
       {
         "podcast_id": 23048,
         "show_title": "ذي لوفن دبي شو",
         "cms_show_id": 1,
-        "cms_category_id": 1
+        "cms_category_id": 1,
+        "image_path": "images/lovin/Lovin Dubai.jpg"
       },
       {
         "podcast_id": 23438,
         "show_title": "The Lovin Karachi Show",
         "cms_show_id": 19,
-        "cms_category_id": 19
+        "cms_category_id": 19,
+        "image_path": "images/lovin/Lovin Karachi.jpg"
       },
       {
         "podcast_id": 23071,
         "show_title": "The Lovin Beirut Show",
         "cms_show_id": 13,
-        "cms_category_id": 13
+        "cms_category_id": 13,
+        "image_path": "images/lovin/Lovin Beruit.jpg"
       },
       {
         "podcast_id": 23053,
         "show_title": "ذي لوفن الدوحة شو",
         "cms_show_id": 9,
-        "cms_category_id": 9
+        "cms_category_id": 9,
+        "image_path": "images/lovin/Lovin Doha.jpg"
       },
       {
         "podcast_id": 23270,
         "show_title": "ذي لوفن راك شو",
         "cms_show_id": 6,
-        "cms_category_id": 6
+        "cms_category_id": 6,
+        "image_path": "images/lovin/Lovin RAK.jpg"
       },
       {
         "podcast_id": 23082,
         "show_title": "ذي لوفن البحرين شو",
         "cms_show_id": 4,
-        "cms_category_id": 4
+        "cms_category_id": 4,
+        "image_path": "images/lovin/Lovin Bahrain.jpg"
       },
       {
         "podcast_id": 12724,
         "show_title": "The Lovin Doha Show",
         "cms_show_id": 9,
-        "cms_category_id": 9
+        "cms_category_id": 9,
+        "image_path": "images/lovin/Lovin Doha.jpg"
       },
       {
         "podcast_id": 10113,
         "show_title": "The Lovin Kuwait Show",
         "cms_show_id": 11,
-        "cms_category_id": 11
+        "cms_category_id": 11,
+        "image_path": "images/lovin/Lovin Kuwait.jpg"
       },
       {
         "podcast_id": 10072,
         "show_title": "The Lovin Muscat Show",
         "cms_show_id": 5,
-        "cms_category_id": 5
+        "cms_category_id": 5,
+        "image_path": "images/lovin/Lovin Muscat.jpg"
       },
       {
         "podcast_id": 10071,
         "show_title": "The Lovin Baghdad Show",
         "cms_show_id": 22,
-        "cms_category_id": 22
+        "cms_category_id": 22,
+        "image_path": "images/lovin/Lovin Baghdad.jpg"
       },
       {
         "podcast_id": 10070,
         "show_title": "The Lovin Bahrain Show",
         "cms_show_id": 4,
-        "cms_category_id": 4
+        "cms_category_id": 4,
+        "image_path": "images/lovin/Lovin Bahrain.jpg"
       },
       {
         "podcast_id": 10069,
         "show_title": "The Lovin Khartoum Show",
         "cms_show_id": 20,
-        "cms_category_id": 20
+        "cms_category_id": 20,
+        "image_path": "images/lovin/Lovin Khartoum.jpg"
       },
       {
         "podcast_id": 10068,
         "show_title": "The Lovin Palestine Show",
         "cms_show_id": 21,
-        "cms_category_id": 21
+        "cms_category_id": 21,
+        "image_path": "images/lovin/Lovin Palestine.jpg"
       },
       {
         "podcast_id": 10067,
         "show_title": "The Lovin Amman Show",
         "cms_show_id": 10,
-        "cms_category_id": 10
+        "cms_category_id": 10,
+        "image_path": "images/lovin/Lovin Amman.jpg"
       },
       {
         "podcast_id": 10066,
         "show_title": "The Lovin Isloo Show",
         "cms_show_id": 14,
-        "cms_category_id": 14
+        "cms_category_id": 14,
+        "image_path": "images/lovin/Lovin Isloo.jpg"
       },
       {
         "podcast_id": 10065,
         "show_title": "ذا لوفن بيروت شو",
         "cms_show_id": 13,
-        "cms_category_id": 13
+        "cms_category_id": 13,
+        "image_path": "images/lovin/Lovin Beruit.jpg"
       },
       {
         "podcast_id": 9556,
         "show_title": "The Lovin Riyadh Show",
         "cms_show_id": 2,
-        "cms_category_id": 2
+        "cms_category_id": 2,
+        "image_path": "images/lovin/The Lovin Riyadh.jpg"
       },
       {
         "podcast_id": 8209,
         "show_title": "The Lovin Abu Dhabi Show",
         "cms_show_id": 8,
-        "cms_category_id": 8
+        "cms_category_id": 8,
+        "image_path": "images/lovin/Lovin Abu Dhabi.jpg"
       },
       {
         "podcast_id": 4734,
         "show_title": "The Lovin Cairo Show - ذا لوفن كايرو شو",
         "cms_show_id": 12,
-        "cms_category_id": 12
+        "cms_category_id": 12,
+        "image_path": "images/lovin/Lovin Cairo.jpg"
       },
       {
         "podcast_id": 5250,
         "show_title": "ذا لوفن السعودية شو",
         "cms_show_id": 13,
-        "cms_category_id": 13
+        "cms_category_id": 13,
+        "image_path": "images/lovin/Lovin Saudi.jpg"
       },
       {
         "podcast_id": 124,
         "show_title": "The Lovin Dubai Show",
         "cms_show_id": 1,
-        "cms_category_id": 1
+        "cms_category_id": 1,
+        "image_path": "images/lovin/Lovin Dubai.jpg"
       }
     ]
   ]

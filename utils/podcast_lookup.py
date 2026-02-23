@@ -2,6 +2,8 @@ import json
 import os
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
+# Project root = directory that contains "data" and "images" (same base for all paths)
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SMASHI_FILE = os.path.join(DATA_DIR, "podcasts_smashi.json")
 LOVIN_FILE = os.path.join(DATA_DIR, "podcasts_lovin.json")
 
@@ -65,14 +67,26 @@ def find_lovin_category_id(podcast_id : int):
     podcast = LOVIN_INDEX.get(podcast_id)
     return podcast["cms_category_id"] if podcast else None
 
-def is_lovin_podcast(podcast_id: int) -> bool:
-    """True if podcast_id is in podcasts_lovin.json."""
-    return podcast_id in LOVIN_INDEX
+def _normalize_podcast_id(podcast_id):
+    """Convert to int for index lookup (API often sends string)."""
+    if podcast_id is None:
+        return None
+    try:
+        return int(podcast_id)
+    except (TypeError, ValueError):
+        return None
 
 
-def is_smashi_podcast(podcast_id: int) -> bool:
-    """True if podcast_id is in podcasts_smashi.json."""
-    return podcast_id in SMASHI_INDEX
+def is_lovin_podcast(podcast_id) -> bool:
+    """True if podcast_id is in podcasts_lovin.json. Accepts int or string."""
+    pid = _normalize_podcast_id(podcast_id)
+    return pid is not None and pid in LOVIN_INDEX
+
+
+def is_smashi_podcast(podcast_id) -> bool:
+    """True if podcast_id is in podcasts_smashi.json. Accepts int or string."""
+    pid = _normalize_podcast_id(podcast_id)
+    return pid is not None and pid in SMASHI_INDEX
 
 
 def get_show_title(podcast_id):
@@ -88,3 +102,22 @@ def get_show_title(podcast_id):
         return None
     podcast = LOVIN_INDEX.get(pid) or SMASHI_INDEX.get(pid)
     return podcast.get("show_title") if podcast else None
+
+
+def get_poster_image_path(podcast_id):
+    """
+    Returns the image_path for a given podcast_id from the podcast data (lovin or smashi).
+    Path is relative to project root (e.g. "images/lovin/Lovin Cairo.jpg").
+    Returns None if not found or path not set.
+    """
+    if podcast_id is None:
+        return None
+    try:
+        pid = int(podcast_id)
+    except (TypeError, ValueError):
+        return None
+    podcast = LOVIN_INDEX.get(pid) or SMASHI_INDEX.get(pid)
+    if not podcast:
+        return None
+    path = podcast.get("image_path") or ""
+    return path.strip() or None
