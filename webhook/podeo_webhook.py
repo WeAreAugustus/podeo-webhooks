@@ -2,10 +2,12 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import shutil
 import subprocess
 import threading
 import time
+from datetime import datetime
 from flask import request
 from flask_restx import Namespace, Resource
 
@@ -36,6 +38,21 @@ import requests
 # Use same project root as data loader (where data/ and images/ live)
 _IMAGES_BASE = os.path.join(PROJECT_ROOT, "images")
 _ALLOWED_IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
+
+# Characters to replace with dash in video/poster file names (backend-safe and filesystem-safe)
+_SANITIZE_CHARS = [' ', '(', ')', '@', '%', '#', '&', '+', '?', '=', '/', '\\']
+
+
+def _sanitize_video_filename(title: str) -> str:
+    """Build a unique, backend-safe base name: sanitize title and append timestamp."""
+    base = str(title) if title else "video"
+    for ch in _SANITIZE_CHARS:
+        base = base.replace(ch, "-")
+    base = re.sub(r"-+", "-", base).strip("-")  # collapse multiple dashes, trim
+    if not base:
+        base = "video"
+    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    return f"{base}_{timestamp}"
 
 
 def _get_local_poster_path(podcast_id) -> str | None:
@@ -197,11 +214,13 @@ class PodeoWebhook(Resource):
             logger.info("MP4 created: %s", output_path)
             time.sleep(2)
 
+            sanitized_base = _sanitize_video_filename(title)
+            video_filename = sanitized_base + ".mp4"
             s3_client = S3Client()
             with open(output_path, "rb") as f:
                 file_bytes = f.read()
             uploaded_url = s3_client.upload_file(
-                file_bytes, str(title).replace(" ", "_") + ".mp4", "podcasts", "video/mp4"
+                file_bytes, video_filename, "podcasts", "video/mp4"
             )
             logger.info("MP4 uploaded: %s", uploaded_url)
 
@@ -238,7 +257,7 @@ class PodeoWebhook(Resource):
                             content_type = "image/jpeg"
                         else:
                             ext = (os.path.splitext(local_poster)[1] or ".png").lstrip(".")
-                            poster_name = str(title).replace(" ", "_") + "_poster." + ext
+                            poster_name = sanitized_base + "_poster." + ext
                             content_type = "image/" + ("jpeg" if ext.lower() in ("jpg", "jpeg") else ext.lower())
                         poster_key = s3_client.upload_file(poster_bytes, poster_name, "podcasts", content_type)
                         if poster_key:
@@ -262,7 +281,7 @@ class PodeoWebhook(Resource):
                         with open(poster_image_path, "rb") as pf:
                             poster_bytes = pf.read()
                     if poster_bytes:
-                        poster_name = str(title).replace(" ", "_") + "_poster.jpg"
+                        poster_name = sanitized_base + "_poster.jpg"
                         poster_key = s3_client.upload_file(poster_bytes, poster_name, "podcasts", "image/jpeg")
                         if poster_key:
                             poster_url_for_api = "https://cdn.smashi.tv/" + poster_key
@@ -298,6 +317,7 @@ class PodeoWebhook(Resource):
                     output_path, token, title, lovin_cms_show_id, lovin_cms_category_id,
                     event_data.get("description", ""), poster_url_for_api,
                     poster_path=poster_image_path if os.path.isfile(poster_image_path) else None,
+                    video_filename=video_filename,
                 )
                 logger.info("Uploaded video to Lovin (podcast_id=%s)", podcast_id)
             
@@ -316,7 +336,8 @@ class PodeoWebhook(Resource):
                     return ""
                 success = upload_video_to_smashi(
                     output_path, token, title, cms_id, cms_category_id,
-                    event_data.get("description", ""), poster_url_for_api
+                    event_data.get("description", ""), poster_url_for_api,
+                    video_filename=video_filename,
                 )
                 if success:
                     logger.info("Uploaded video to Smashi (podcast_id=%s)", podcast_id)

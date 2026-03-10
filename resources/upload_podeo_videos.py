@@ -30,7 +30,7 @@ def smashi_login(email: str, password: str) -> str:
         return None
 
 
-def upload_video_to_smashi(video_file_path: str, token: str, title: str, shows_id: int, category_id: int, description: str, poster_url: str) -> bool:
+def upload_video_to_smashi(video_file_path: str, token: str, title: str, shows_id: int, category_id: int, description: str, poster_url: str, video_filename: str = None) -> bool:
     """
     Takes a video path and token and uploads video to smashi.
 
@@ -42,6 +42,7 @@ def upload_video_to_smashi(video_file_path: str, token: str, title: str, shows_i
         category_id(int): Category of the show.
         description(str): Video body.
         poster_url(str): Poster image url.
+        video_filename(str): Optional filename for the uploaded video (e.g. sanitized + timestamp). If None, uses title + ".mp4".
     Returns:
         Bool: True for success and false for failure.
     """
@@ -65,8 +66,9 @@ def upload_video_to_smashi(video_file_path: str, token: str, title: str, shows_i
         "status": "uploaded"
     }
 
+    name_for_file = (video_filename if video_filename else (title + ".mp4"))
     files = [
-        ('video_file', (title + ".mp4", open(video_file_path, 'rb'), 'video/mp4'))
+        ('video_file', (name_for_file, open(video_file_path, 'rb'), 'video/mp4'))
     ]
 
     headers = {
@@ -137,7 +139,7 @@ def login_lovin_backend(email: str, password: str) -> str:
 
 def upload_video_to_lovin_backend(video_file_path: str, token: str,
  title: str, shows_id: int, category_id: int,
- description: str, poster_url: str, poster_path: str = None) -> bool:
+ description: str, poster_url: str, poster_path: str = None, video_filename: str = None) -> bool:
     """
     Takes a video path and token and uploads video to Lovin backend.
 
@@ -150,6 +152,7 @@ def upload_video_to_lovin_backend(video_file_path: str, token: str,
         description(str): Video body.
         poster_url(str): Poster image url (for API payload).
         poster_path(str): Optional path to poster image file. If None, uses poster_image or image.png in CWD.
+        video_filename(str): Optional filename for the uploaded video (e.g. sanitized + timestamp). If None, uses title + ".mp4".
     Returns:
         Bool: True for success and false for failure.
     """
@@ -182,8 +185,9 @@ def upload_video_to_lovin_backend(video_file_path: str, token: str,
     ext = os.path.splitext(poster_path)[1].lower()
     poster_content_type = "image/jpeg" if ext in (".jpg", ".jpeg") else "image/png"
 
+    name_for_file = (video_filename if video_filename else (title + ".mp4"))
     files = [
-        ("video_file", (title + ".mp4", open(video_file_path, "rb"), "video/mp4")),
+        ("video_file", (name_for_file, open(video_file_path, "rb"), "video/mp4")),
         ("poster_file", (os.path.basename(poster_path), open(poster_path, "rb"), poster_content_type)),
     ]
 
