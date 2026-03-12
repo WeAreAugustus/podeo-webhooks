@@ -40,7 +40,7 @@ _IMAGES_BASE = os.path.join(PROJECT_ROOT, "images")
 _ALLOWED_IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
 
 # Characters to replace with dash in video/poster file names (backend-safe and filesystem-safe)
-_SANITIZE_CHARS = [' ', '(', ')', '@', '%', '#', '&', '+', '?', '=', '/', '\\']
+_SANITIZE_CHARS = [' ', '(', ')', '@', '%', '#', '&', '+', '?', '=', '/', '\\', ',', ':' , '-']
 
 
 def _sanitize_video_filename(title: str) -> str:
