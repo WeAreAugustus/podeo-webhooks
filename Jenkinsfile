@@ -86,7 +86,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-            docker build -t ${DOCKER_TAG} .
+            sudo docker build -t ${DOCKER_TAG} .
         '''
             }
         }
