@@ -151,7 +151,7 @@ def upload_video_to_lovin_backend(video_file_path: str, token: str,
         category_id(int): Category of the show.
         description(str): Video body.
         poster_url(str): Poster image url (for API payload).
-        poster_path(str): Optional path to poster image file. If None, uses poster_image or image.png in CWD.
+        poster_path(str): Optional path to poster image file. If None, uses image.png in CWD.
         video_filename(str): Optional filename for the uploaded video (e.g. sanitized + timestamp). If None, uses title + ".mp4".
     Returns:
         Bool: True for success and false for failure.
@@ -176,11 +176,7 @@ def upload_video_to_lovin_backend(video_file_path: str, token: str,
         "status": "uploaded"
     }
 
-    if poster_path and os.path.isfile(poster_path):
-        pass
-    elif os.path.exists("poster_image"):
-        poster_path = "poster_image"
-    else:
+    if not (poster_path and os.path.isfile(poster_path)):
         poster_path = "image.png"
     ext = os.path.splitext(poster_path)[1].lower()
     poster_content_type = "image/jpeg" if ext in (".jpg", ".jpeg") else "image/png"

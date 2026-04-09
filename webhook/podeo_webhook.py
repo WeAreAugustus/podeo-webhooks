@@ -2,11 +2,13 @@ import hashlib
 import hmac
 import json
 import os
+import queue
 import re
 import shutil
 import subprocess
 import threading
 import time
+import uuid
 from datetime import datetime
 from flask import request
 from flask_restx import Namespace, Resource
@@ -35,10 +37,6 @@ from utils.logger import logger
 
 import requests
 
-# Use same project root as data loader (where data/ and images/ live)
-_IMAGES_BASE = os.path.join(PROJECT_ROOT, "images")
-_ALLOWED_IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
-
 # Characters to replace with dash in video/poster file names (backend-safe and filesystem-safe)
 _SANITIZE_CHARS = [' ', '(', ')', '@', '%', '#', '&', '+', '?', '=', '/', '\\', ',', ':' , '-']
 
@@ -56,65 +54,17 @@ def _sanitize_video_filename(title: str) -> str:
 
 
 def _get_local_poster_path(podcast_id) -> str | None:
-    """If this podcast has an image (from object image_path or folder lookup), return its path; else None."""
+    """Return poster path from podcast object's image_path only."""
     if podcast_id is None:
         return None
-    # Prefer image_path from podcast object (relative to project root)
+    # Use image_path from podcast object (relative to project root) only.
     rel_path = get_poster_image_path(podcast_id)
     if rel_path:
-        # Normalize: JSON has "images/lovin/File.jpg"; resolve against project root (same as data loader)
+        # Normalize: JSON has paths like "images/lovin/File.jpg"; resolve against project root.
         abs_path = os.path.normpath(os.path.join(PROJECT_ROOT, rel_path))
         if os.path.isfile(abs_path):
             return abs_path
         logger.debug("image_path from JSON not found at %s (project_root=%s)", abs_path, PROJECT_ROOT)
-
-    if is_lovin_podcast(podcast_id):
-        folder = os.path.join(_IMAGES_BASE, "lovin")
-    elif is_smashi_podcast(podcast_id):
-        folder = os.path.join(_IMAGES_BASE, "smashi")
-    else:
-        return None
-    if not os.path.isdir(folder):
-        return None
-
-    # Lovin: match by show title (e.g. "The Lovin Cairo Show" -> "Lovin Cairo.jpg")
-    if is_lovin_podcast(podcast_id):
-        show_title = get_show_title(podcast_id) or ""
-        match_key = show_title.replace("The Lovin ", "").replace("The Lovin' ", "").replace(" Show", "").strip()
-        if match_key:
-            match_key = "Lovin " + match_key
-            match_lower = match_key.lower()
-            for name in sorted(os.listdir(folder)):
-                if not name.lower().endswith(_ALLOWED_IMAGE_EXTS):
-                    continue
-                stem = os.path.splitext(name)[0]
-                if match_lower in stem.lower():
-                    return os.path.join(folder, name)
-
-    # Smashi: match by show title (e.g. "The Smashi Gaming Show" -> "smashi_gaming.png")
-    if is_smashi_podcast(podcast_id):
-        show_title = get_show_title(podcast_id) or ""
-        # "The Smashi Gaming Show" -> "gaming"; "Smashi Entertainment Show" -> "entertainment"
-        match_key = (
-            show_title.replace("The Smashi ", "").replace("Smashi ", "").replace(" Show", "").strip()
-        )
-        if match_key:
-            match_lower = match_key.lower()
-            for name in sorted(os.listdir(folder)):
-                if not name.lower().endswith(_ALLOWED_IMAGE_EXTS):
-                    continue
-                stem = os.path.splitext(name)[0]  # e.g. smashi_gaming
-                if match_lower in stem.lower() or ("smashi_" + match_lower) in stem.lower():
-                    return os.path.join(folder, name)
-
-    # Fallback: image.png, image.jpg, or first image in folder
-    for name in ("image.png", "image.jpg", "image.jpeg", "image.webp"):
-        path = os.path.join(folder, name)
-        if os.path.isfile(path):
-            return path
-    for name in sorted(os.listdir(folder)):
-        if name.lower().endswith(_ALLOWED_IMAGE_EXTS):
-            return os.path.join(folder, name)
     return None
 
 # Optional: only if using Lovin upload
@@ -132,10 +82,36 @@ if not CLIENT_ID or not CLIENT_SECRET:
 
 @ns.route("/podeo")
 class PodeoWebhook(Resource):
+    _event_queue = queue.Queue()
+    _worker_started = False
+    _worker_lock = threading.Lock()
+
+    @classmethod
+    def _worker_loop(cls):
+        while True:
+            event_type, event_data = cls._event_queue.get()
+            try:
+                cls().handle_events(event_type, event_data)
+            except Exception as e:
+                logger.exception("Queue worker failed while handling event '%s': %s", event_type, e)
+            finally:
+                cls._event_queue.task_done()
+
+    @classmethod
+    def _ensure_worker_started(cls):
+        with cls._worker_lock:
+            if cls._worker_started:
+                return
+            worker = threading.Thread(target=cls._worker_loop, name="podeo-webhook-worker", daemon=True)
+            worker.start()
+            cls._worker_started = True
+            logger.info("Podeo webhook worker started (single-threaded queue mode)")
+
     def upload_mp3(self, event_data):
+        temp_paths = []
         try:
+            job_id = uuid.uuid4().hex[:10]
             mp3_url = event_data.get("mp3_url", "")
-            poster_url = event_data.get("image_url", "")
             title = event_data.get("name", "")
             # API may send podcasts_id or podcast_id; normalize to int for lookups
             podcast_id = event_data.get("podcasts_id") or event_data.get("podcast_id")
@@ -146,44 +122,26 @@ class PodeoWebhook(Resource):
                     pass
 
             response = requests.get(mp3_url)
-            input_mp3_path = os.path.join(PROJECT_ROOT, "input.mp3")
+            input_mp3_path = os.path.join(PROJECT_ROOT, f"input_{job_id}.mp3")
+            temp_paths.append(input_mp3_path)
             with open(input_mp3_path, "wb") as f:
                 f.write(response.content)
             logger.info("MP3 downloaded")
 
-            # Use image only from image_path in podcast object when set; use API image_url only when object has no image_path
-            poster_image_path = os.path.join(PROJECT_ROOT, "poster_image")
-            default_image_path = os.path.join(PROJECT_ROOT, "image.png")
-            image_path = default_image_path if os.path.isfile(default_image_path) else "image.png"
-            has_image_path_in_object = bool(get_poster_image_path(podcast_id))
+            # Strict behavior: use image_path from this request's podcast object only.
             local_poster = _get_local_poster_path(podcast_id)
-            if local_poster:
-                image_path = local_poster
-                shutil.copy2(local_poster, poster_image_path)
-                logger.info("Using local poster from %s for podcast %s", local_poster, podcast_id)
-            elif has_image_path_in_object:
-                # Object has image_path but file missing: use default, do not use API image_url
-                if os.path.isfile(default_image_path):
-                    shutil.copy2(default_image_path, poster_image_path)
-                    image_path = default_image_path
-                logger.info("Podcast has image_path but file not found, using default image (not API image_url)")
-            elif poster_url:
-                try:
-                    img_resp = requests.get(poster_url, timeout=10)
-                    img_resp.raise_for_status()
-                    with open(poster_image_path, "wb") as img_f:
-                        img_f.write(img_resp.content)
-                    image_path = poster_image_path
-                    logger.info("Poster image downloaded from payload: %s", poster_url)
-                except Exception as e:
-                    logger.warning(
-                        "Failed to download poster image from %s, falling back to default image.png: %s",
-                        poster_url,
-                        e,
-                    )
+            if not local_poster:
+                logger.warning(
+                    "Podcast %s has no valid image_path file in object; skipping upload to avoid wrong image reuse",
+                    podcast_id,
+                )
+                return ""
+            image_path = local_poster
+            logger.info("Using object poster %s for podcast %s", local_poster, podcast_id)
 
             audio_path = input_mp3_path
-            output_path = os.path.join(PROJECT_ROOT, "output.mp4")
+            output_path = os.path.join(PROJECT_ROOT, f"output_{job_id}.mp4")
+            temp_paths.append(output_path)
             ffmpeg_exe = os.getenv("FFMPEG_PATH") or shutil.which("ffmpeg")
             if not ffmpeg_exe:
                 logger.error(
@@ -224,9 +182,8 @@ class PodeoWebhook(Resource):
             )
             logger.info("MP4 uploaded: %s", uploaded_url)
 
-            # Poster URL for API: use our image (upload to S3) when object has image_path or we used local;
-            # use API image_url only when object has no image_path and we downloaded from API.
-            poster_url_for_api = poster_url if not has_image_path_in_object else None
+            # Poster URL for API: always upload this request's object image to S3.
+            poster_url_for_api = None
             if local_poster and os.path.isfile(local_poster):
                 try:
                     import io
@@ -252,42 +209,24 @@ class PodeoWebhook(Resource):
                             poster_bytes = pf.read()
                         use_jpeg = (os.path.splitext(local_poster)[1] or "").lower() in (".jpg", ".jpeg")
                     if poster_bytes:
+                        poster_base_name = f"{sanitized_base}_{job_id}_poster"
                         if use_jpeg:
-                            poster_name = str(title).replace(" ", "_") + "_poster.jpg"
+                            poster_name = poster_base_name + ".jpg"
                             content_type = "image/jpeg"
                         else:
                             ext = (os.path.splitext(local_poster)[1] or ".png").lstrip(".")
-                            poster_name = sanitized_base + "_poster." + ext
+                            poster_name = poster_base_name + "." + ext
                             content_type = "image/" + ("jpeg" if ext.lower() in ("jpg", "jpeg") else ext.lower())
                         poster_key = s3_client.upload_file(poster_bytes, poster_name, "podcasts", content_type)
                         if poster_key:
                             poster_url_for_api = "https://cdn.smashi.tv/" + poster_key
                             logger.info("Poster uploaded to S3 as JPG, using URL for API: %s", poster_url_for_api)
                 except Exception as e:
-                    logger.warning("Failed to upload local poster to S3, using API poster_url: %s", e)
-            elif has_image_path_in_object and os.path.isfile(poster_image_path):
-                # Object has image_path but file was missing; we used default image - upload it to S3 (do not use API image_url)
-                try:
-                    import io
-                    poster_bytes = None
-                    try:
-                        from PIL import Image
-                        with Image.open(poster_image_path) as img:
-                            rgb = img.convert("RGB")
-                            buf = io.BytesIO()
-                            rgb.save(buf, format="JPEG", quality=90)
-                            poster_bytes = buf.getvalue()
-                    except (ImportError, Exception):
-                        with open(poster_image_path, "rb") as pf:
-                            poster_bytes = pf.read()
-                    if poster_bytes:
-                        poster_name = sanitized_base + "_poster.jpg"
-                        poster_key = s3_client.upload_file(poster_bytes, poster_name, "podcasts", "image/jpeg")
-                        if poster_key:
-                            poster_url_for_api = "https://cdn.smashi.tv/" + poster_key
-                            logger.info("Poster (default) uploaded to S3, using URL for API: %s", poster_url_for_api)
-                except Exception as e:
-                    logger.warning("Failed to upload default poster to S3: %s", e)
+                    logger.warning("Failed to upload local poster to S3: %s", e)
+
+            if not poster_url_for_api:
+                logger.warning("No poster URL generated for podcast %s; skipping upload", podcast_id)
+                return ""
 
             podcast_id = event_data.get("podcasts_id")
             if podcast_id is None:
@@ -316,7 +255,7 @@ class PodeoWebhook(Resource):
                 upload_video_to_lovin_backend(
                     output_path, token, title, lovin_cms_show_id, lovin_cms_category_id,
                     event_data.get("description", ""), poster_url_for_api,
-                    poster_path=poster_image_path if os.path.isfile(poster_image_path) else None,
+                    poster_path=local_poster,
                     video_filename=video_filename,
                 )
                 logger.info("Uploaded video to Lovin (podcast_id=%s)", podcast_id)
@@ -341,10 +280,6 @@ class PodeoWebhook(Resource):
                 )
                 if success:
                     logger.info("Uploaded video to Smashi (podcast_id=%s)", podcast_id)
-                    if os.path.exists(audio_path):
-                        os.remove(audio_path)
-                    if os.path.exists(output_path):
-                        os.remove(output_path)
                 else:
                     logger.warning("Smashi upload failed")
             else:
@@ -354,6 +289,13 @@ class PodeoWebhook(Resource):
                 )
         except Exception as e:
             logger.exception("Error uploading MP3: %s", e)
+        finally:
+            for path in temp_paths:
+                try:
+                    if os.path.exists(path):
+                        os.remove(path)
+                except Exception as cleanup_err:
+                    logger.warning("Failed cleaning temporary file %s: %s", path, cleanup_err)
         return ""
 
     def handle_events(self, event_type, event_data):
@@ -406,12 +348,9 @@ class PodeoWebhook(Resource):
             event_data = payload.get("data")
             logger.info("Received Podeo event: %s", event_type)
 
-            threading.Thread(
-                target=self.handle_events,
-                args=(event_type, event_data),
-                daemon=True
-            ).start()
-            return {"status": "received"}, 200
+            self._ensure_worker_started()
+            self._event_queue.put((event_type, event_data))
+            return {"status": "queued"}, 200
         except Exception as e:
             logger.exception("Error processing webhook: %s", e)
             notify_podeo_error("Podeo webhook error (500)", str(e))
